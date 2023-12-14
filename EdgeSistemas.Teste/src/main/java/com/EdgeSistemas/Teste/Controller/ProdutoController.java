@@ -3,6 +3,7 @@ package com.EdgeSistemas.Teste.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -29,40 +30,35 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 
+	
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> criarProduto(@Valid @RequestBody Produto produto) {
 		try {
 			return ResponseEntity.ok(this.produtoService.criarProduto(produto));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao criar o Produto" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao criar o Produto" + e.getMessage());
 		}
 	}
 
+	
 	@GetMapping("/todosProdutos")
 	public ResponseEntity<List<ProdutoDto>> listarTodos() {
-		List<ProdutoDto> produtos = produtoService.listarTodos();
-		try {
+		return ResponseEntity.ok(this.produtoService.listarTodos());
+    }
 
-			return ResponseEntity.ok(this.produtoService.listarTodos());
-
-		} 
-		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body(produtos);
-		}
-
-	}
-
+	
 	@GetMapping("/buscaPorCodigo/{codigo}")
 	public ResponseEntity<?> buscaPorCodigo(@PathVariable("codigo") Long codigo) {
 		try {
 			return ResponseEntity.ok(this.produtoService.buscarPorCodigo(codigo));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao realizar a busca por codigo" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao realizar a busca por codigo" + e.getMessage());
 		}
 	}
 
+	
 	@PutMapping("/alterarProduto/{idEditavel}")
 	public ResponseEntity<?> editarProduto(@PathVariable("idEditavel") Long idEditavel, @RequestBody Produto produto) {
 		try {
@@ -70,19 +66,21 @@ public class ProdutoController {
 
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao editar o produto" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao editar o produto" + e.getMessage());
 		}
 	}
 
+	
 	@DeleteMapping("/deletarProduto/{codigo}")
 	public ResponseEntity<String> deletarProduto(@PathVariable("codigo") Long codigo) {
 		try {
 			return ResponseEntity.ok(this.produtoService.deletarProduto(codigo));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao deletar produto" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao deletar produto" + e.getMessage());
 		}
 	}
+	
 	
 	@GetMapping("/buscaPorNome/{nome}")
 	public ResponseEntity<?> buscaPorCodigo(@PathVariable("nome") String nome) {
@@ -90,9 +88,10 @@ public class ProdutoController {
 			return ResponseEntity.ok(this.produtoService.buscarPorNome(nome));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao realizar a busca por Nome" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao realizar a busca por Nome" + e.getMessage());
 		}
 	}
+	
 	
 	@GetMapping("/buscaPorMarca/{marca}")
 	public ResponseEntity<?> buscaPorMarca(@PathVariable("marca") String marca) {
@@ -100,7 +99,7 @@ public class ProdutoController {
 			return ResponseEntity.ok(this.produtoService.buscarPorMarca(marca));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("Erro ao realizar a busca por Marca" + e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao realizar a busca por Marca" + e.getMessage());
 		}
 	}
 
