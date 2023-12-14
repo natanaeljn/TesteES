@@ -80,7 +80,27 @@ public class ProdutoController {
 			return ResponseEntity.ok(this.produtoService.deletarProduto(codigo));
 		} 
 		catch (ProdutoException e) {
-			return ResponseEntity.badRequest().body("erro ao deletar produto" + e.getMessage());
+			return ResponseEntity.badRequest().body("Erro ao deletar produto" + e.getMessage());
+		}
+	}
+	
+	@GetMapping("/buscaPorNome/{nome}")
+	public ResponseEntity<?> buscaPorCodigo(@PathVariable("nome") String nome) {
+		try {
+			return ResponseEntity.ok(this.produtoService.buscarPorNome(nome));
+		} 
+		catch (ProdutoException e) {
+			return ResponseEntity.badRequest().body("Erro ao realizar a busca por Nome" + e.getMessage());
+		}
+	}
+	
+	@GetMapping("/buscaPorMarca/{marca}")
+	public ResponseEntity<?> buscaPorMarca(@PathVariable("marca") String marca) {
+		try {
+			return ResponseEntity.ok(this.produtoService.buscarPorMarca(marca));
+		} 
+		catch (ProdutoException e) {
+			return ResponseEntity.badRequest().body("Erro ao realizar a busca por Marca" + e.getMessage());
 		}
 	}
 

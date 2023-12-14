@@ -41,5 +41,13 @@ public class ProdutoService {
 		produtoRepository.deleteById(id);
 		return "deletado";
 	}
+	
+	public List<ProdutoDto> buscarPorNome(String nome) {
+		return produtoRepository.findByNomeAllIgnoringCase(nome).stream().map(ProdutoDto::new).toList();
+	}
+
+	public List<ProdutoDto> buscarPorMarca(String marca) {
+		return produtoRepository.findByMarcaAllIgnoringCase(marca).stream().map(ProdutoDto::new).toList();
+	}
 
 }
